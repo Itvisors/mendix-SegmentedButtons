@@ -4,7 +4,7 @@
  * @author Mendix UI Content Team
  */
 import { CSSProperties } from "react";
-import { DynamicValue, EditableValue, ListValue, ListActionValue, ListAttributeValue } from "mendix";
+import { ActionValue, DynamicValue, EditableValue, ListValue, ListAttributeValue } from "mendix";
 
 export interface SegmentedButtonsContainerProps {
     name: string;
@@ -16,10 +16,11 @@ export interface SegmentedButtonsContainerProps {
     dataSourceButtons: ListValue;
     titleAttr: ListAttributeValue<string>;
     keyAttr?: ListAttributeValue<string | BigJs.Big>;
-    selectedAttr?: ListAttributeValue<boolean>;
+    defaultSelectedAttr?: ListAttributeValue<boolean>;
     multiple: boolean;
-    onClickAction?: ListActionValue;
+    onClickAction?: ActionValue;
     responseAttribute: EditableValue<string>;
+    refreshAttribute?: EditableValue<boolean>;
 }
 
 export interface SegmentedButtonsPreviewProps {
@@ -29,8 +30,9 @@ export interface SegmentedButtonsPreviewProps {
     dataSourceButtons: {} | null;
     titleAttr: string;
     keyAttr: string;
-    selectedAttr: string;
+    defaultSelectedAttr: string;
     multiple: boolean;
     onClickAction: {} | null;
     responseAttribute: string;
+    refreshAttribute: string;
 }

@@ -32,54 +32,71 @@ export default class SegmentedButtons extends Component<SegmentedButtonsContaine
     };
 
     componentDidUpdate (prevProps: SegmentedButtonsContainerProps) {
+        let refresh = !this.initialized;
+
+        // Refresh the data if the refreshAttribute has been set to true
+        if(prevProps.refreshAttribute && this.props.refreshAttribute &&
+            this.props.refreshAttribute.value && !prevProps.refreshAttribute.value) {
+            
+            this.props.refreshAttribute.setValue(false);
+            // Make sure data and state will be refreshed
+            refresh = true; 
+        }
+
         // Check if the datasource has been loaded
         if (this.props.dataSourceButtons.status === 'available') {
             // If the items have been changed
-            if (this.props.dataSourceButtons.items && this.props.dataSourceButtons.items !== prevProps.dataSourceButtons.items) {
+            if (this.props.dataSourceButtons.items &&
+                (refresh || this.props.dataSourceButtons.items !== prevProps.dataSourceButtons.items)) {
                 let buttonsSelected = 0;
                 const multiSelect = this.props.multiple;
-                let buttonId = 0;
                 // Map the options and get the selected ones
-                this.buttons = this.props.dataSourceButtons.items.map(buttonItem => {
+                const newButtons = this.props.dataSourceButtons.items.map(buttonItem => {
                     const button = {} as Button; 
-                    button.title = this.props.titleAttr(buttonItem).value;
+                    const buttonTitle = this.props.titleAttr(buttonItem).value;
+                    button.title = buttonTitle;
                     //If key is used, add key to the option
                     if (this.props.keyAttr) {
                         button.key = this.props.keyAttr(buttonItem).value;
                     }
-                    button.id = buttonId;
-                    buttonId++;
-                    // Set selected options
-                    if (this.props.selectedAttr && this.props.selectedAttr(buttonItem).value) {
-                        button.selected = true;
-                        if (!multiSelect && buttonsSelected === 1) {
-                            console.warn("Segmented buttons: Multiple options are set as default for a single select.");
-                            buttonsSelected ++;
-                        } 
+                    // If data needs to be refreshed, get default options
+                    if (refresh) {
+                        button.selected = false;
+                        if (this.props.defaultSelectedAttr && this.props.defaultSelectedAttr(buttonItem).value) {
+                            button.selected = true;
+                            if (!multiSelect && buttonsSelected === 1) {
+                                console.warn("Segmented buttons: Multiple options are set as default for a single select.");
+                                buttonsSelected ++;
+                            } 
+                        }
+                    } else {
+                        // Else check if option is selected (based on the title). This is done since it can be the case that the options have been changed.
+                        if (this.buttons.find(button => button.selected && button.title === buttonTitle)) {
+                            button.selected = true;
+                        }
                     }
                     return button;
                 })
                 this.initialized = true;
+                this.buttons = newButtons;
                 this.props.responseAttribute.setValue(JSON.stringify(this.buttons));
                 this.setState({updateDate: new Date()});
             }
         }
     }
 
-    buttonClick = (buttonId: number) => { 
-        if (this.props.dataSourceButtons.items && this.props.onClickAction) {
-            const buttonClicked = this.props.dataSourceButtons.items[buttonId];
-            const onClickAction = this.props.onClickAction(buttonClicked);
-            if (onClickAction.canExecute) {
-                onClickAction.execute();
-            }
+    buttonClick = (button : Button) => { 
+        button.selected = !button.selected;
+        this.props.responseAttribute.setValue(JSON.stringify(this.buttons));
+        if (this.props.onClickAction && this.props.onClickAction.canExecute) {
+                this.props.onClickAction.execute();
         }   
     }
 
     render(): ReactNode {
         return <ButtonGroup 
             buttons = {this.buttons}
-            onButtonClick = {(buttonId: number) => this.buttonClick(buttonId)}
+            onButtonClick = {(button : Button) => this.buttonClick(button)}
         />;
     }
 }

@@ -10,14 +10,21 @@ import com.mendix.core.Core;
 import com.mendix.core.CoreException;
 import com.mendix.systemwideinterfaces.MendixRuntimeException;
 import com.mendix.systemwideinterfaces.core.IContext;
+import com.mendix.systemwideinterfaces.core.IMendixObject;
 
 public class Microflows
 {
 	// These are the microflows for the MyFirstModule module
-	public static void aCT_Button_Clicked(IContext context, myfirstmodule.proxies.Button _button)
+	public static void aCT_Button_Clicked(IContext context, myfirstmodule.proxies.Root _root)
 	{
 		Map<java.lang.String, Object> params = new HashMap<>();
-		params.put("Button", _button == null ? null : _button.getMendixObject());
+		params.put("Root", _root == null ? null : _root.getMendixObject());
 		Core.microflowCall("MyFirstModule.ACT_Button_Clicked").withParams(params).execute(context);
+	}
+	public static myfirstmodule.proxies.Root dS_Root_GetOrCreate(IContext context)
+	{
+		Map<java.lang.String, Object> params = new HashMap<>();
+		IMendixObject result = (IMendixObject)Core.microflowCall("MyFirstModule.DS_Root_GetOrCreate").withParams(params).execute(context);
+		return result == null ? null : myfirstmodule.proxies.Root.initialize(context, result);
 	}
 }

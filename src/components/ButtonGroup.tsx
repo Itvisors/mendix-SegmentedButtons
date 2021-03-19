@@ -12,7 +12,7 @@ export class ButtonGroup extends Component<ButtonGroupProps> {
             let className = button.selected ? "selected" : "";
             return <button 
                 className = {className}
-                onClick = {() => this.props.onButtonClick ? this.props.onButtonClick(button.id) : undefined}
+                onClick = {() => this.props.onButtonClick ? this.props.onButtonClick(button) : undefined}
                 >
                     {button.title}
                 </button>
@@ -20,6 +20,8 @@ export class ButtonGroup extends Component<ButtonGroupProps> {
     }
     
     render(): ReactNode {;
-        return <div>{this.showButtons(this.props.buttons)}</div>;
+        return <div className = "segmentedButtons">
+                {this.showButtons(this.props.buttons)}
+            </div>;
     }
 }

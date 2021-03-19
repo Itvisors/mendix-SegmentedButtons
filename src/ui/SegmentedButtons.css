@@ -1,6 +1,7 @@
 /*
 Place your custom CSS here
 */
-.widget-hello-world {
-
+.segmentedButtons button.selected {
+    background-color: red;
+    color: white;
 }

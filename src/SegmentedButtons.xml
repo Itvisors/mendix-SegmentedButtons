@@ -21,7 +21,7 @@
             </property>
             <property key="titleAttr" type="attribute" dataSource="dataSourceButtons" required="true">
                 <caption>Title</caption>
-                <description>String attribute where the title is stored to be shown in the button.</description>
+                <description>String attribute where the title is stored to be shown in the button. Should be unique to be able to  to make a distinction between the items.</description>
                 <attributeTypes>
                     <attributeType name="String"/>
                 </attributeTypes>
@@ -34,7 +34,7 @@
                     <attributeType name="Integer"/>
                 </attributeTypes>
             </property>
-            <property key="selectedAttr" type="attribute" dataSource="dataSourceButtons" required="false">
+            <property key="defaultSelectedAttr" type="attribute" dataSource="dataSourceButtons" required="false">
                 <caption>Selected</caption>
                 <description>Optional: Boolean attribute where is stored whether this option is selected or not. Write access is needed.</description>
                 <attributeTypes>
@@ -47,7 +47,7 @@
             </property>
         </propertyGroup>
         <propertyGroup caption="Events">
-            <property key="onClickAction" type="action" required="false" dataSource="dataSourceButtons">
+            <property key="onClickAction" type="action" required="false">
                 <caption>On Change Action</caption>
                 <description>Action to trigger when an button is clicked. 
                 Since this action is triggered for every change and this can happen quite fast if "No close on select" is set to true, it is wise to keep this action very short. If this combination is used, the response can best be mapped when used e.g. on save.</description>
@@ -57,6 +57,13 @@
                 <description>Attribute where the selected button(s) are stored in json format ([{"title":"example1","key":"string","selected":true}]. User needs write access on this attribute.</description>
                 <attributeTypes>
                     <attributeType name="String"/>
+                </attributeTypes>
+            </property>
+            <property key="refreshAttribute" type="attribute" required="false">
+                <caption>Refresh</caption>
+                <description>Set to true to refresh the widget back to the default values, widget will set the value back to false. Make sure the user has got write access.</description>
+                <attributeTypes>
+                    <attributeType name="Boolean"/>
                 </attributeTypes>
             </property>
         </propertyGroup>
