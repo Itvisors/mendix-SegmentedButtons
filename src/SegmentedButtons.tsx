@@ -73,6 +73,8 @@ export default class SegmentedButtons extends Component<SegmentedButtonsContaine
                         // Else check if option is selected (based on the title). This is done since it can be the case that the options have been changed.
                         if (this.buttons.find(button => button.selected && button.title === buttonTitle)) {
                             button.selected = true;
+                        } else {
+                            button.selected = false;
                         }
                     }
                     return button;
