@@ -9,7 +9,8 @@ export interface ButtonGroupProps {
 export class ButtonGroup extends Component<ButtonGroupProps> {
     private showButtons(buttonArray: Array<Button>) {
         return buttonArray.map((button) => {
-            let className = button.selected ? "selected" : "";
+            let className = "btn mx-button"
+            className += button.selected ? " selected" : "";
             return <button 
                 className = {className}
                 onClick = {() => this.props.onButtonClick ? this.props.onButtonClick(button) : undefined}
