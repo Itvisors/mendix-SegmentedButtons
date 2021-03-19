@@ -8,9 +8,56 @@
     <icon/>
     <properties>
         <propertyGroup caption="General">
-            <property key="sampleText" type="string" required="false">
-                <caption>Default value</caption>
-                <description>Sample text input</description>
+            <systemProperty key="Label" />
+            <systemProperty key="Visibility"/>
+            <property key="editable" type="expression" required="false">
+                <caption>Editable</caption>
+                <description>Whether or not the widget is ediable. If left empty, the widget will be editable.</description>
+                <returnType type="Boolean" />
+            </property>
+            <property key="dataSourceButtons" type="datasource" isList="true" required="true">
+                <caption>Data source</caption>
+                <description />
+            </property>
+            <property key="titleAttr" type="attribute" dataSource="dataSourceButtons" required="true">
+                <caption>Title</caption>
+                <description>String attribute where the title is stored to be shown in the button.</description>
+                <attributeTypes>
+                    <attributeType name="String"/>
+                </attributeTypes>
+            </property>
+            <property key="keyAttr" type="attribute" dataSource="dataSourceButtons" required="false">
+                <caption>Key</caption>
+                <description>Optional: Attribute where the key is stored. This key is only used in the response and can be used when the title does not suffice to find the object in mendix. The new JSON will be for example [{"title":"example1", "key":"1234"}] for multiselect when a string key is used.</description>
+                <attributeTypes>
+                    <attributeType name="String"/>
+                    <attributeType name="Integer"/>
+                </attributeTypes>
+            </property>
+            <property key="selectedAttr" type="attribute" dataSource="dataSourceButtons" required="false">
+                <caption>Selected</caption>
+                <description>Optional: Boolean attribute where is stored whether this option is selected or not. Write access is needed.</description>
+                <attributeTypes>
+                    <attributeType name="Boolean"/>
+                </attributeTypes>
+            </property>
+            <property key="multiple" type="boolean" required="true" defaultValue="true">
+                <caption>Multi-select</caption>
+                <description>If set to true, multiple options can be selected. Otherwise, the widget can be used as single-select</description>
+            </property>
+        </propertyGroup>
+        <propertyGroup caption="Events">
+            <property key="onClickAction" type="action" required="false" dataSource="dataSourceButtons">
+                <caption>On Change Action</caption>
+                <description>Action to trigger when an button is clicked. 
+                Since this action is triggered for every change and this can happen quite fast if "No close on select" is set to true, it is wise to keep this action very short. If this combination is used, the response can best be mapped when used e.g. on save.</description>
+            </property>
+            <property key="responseAttribute" type="attribute" required="true">
+                <caption>Response</caption>
+                <description>Attribute where the selected button(s) are stored in json format ([{"title":"example1","key":"string","selected":true}]. User needs write access on this attribute.</description>
+                <attributeTypes>
+                    <attributeType name="String"/>
+                </attributeTypes>
             </property>
         </propertyGroup>
     </properties>
