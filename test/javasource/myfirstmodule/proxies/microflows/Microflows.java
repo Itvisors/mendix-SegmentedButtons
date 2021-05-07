@@ -15,11 +15,17 @@ import com.mendix.systemwideinterfaces.core.IMendixObject;
 public class Microflows
 {
 	// These are the microflows for the MyFirstModule module
-	public static void aCT_Button_Clicked(IContext context, myfirstmodule.proxies.Root _root)
+	public static void aCT_Button_Click(IContext context, myfirstmodule.proxies.Root _root)
 	{
 		Map<java.lang.String, Object> params = new HashMap<>();
 		params.put("Root", _root == null ? null : _root.getMendixObject());
-		Core.microflowCall("MyFirstModule.ACT_Button_Clicked").withParams(params).execute(context);
+		Core.microflowCall("MyFirstModule.ACT_Button_Click").withParams(params).execute(context);
+	}
+	public static void aCT_Button_Save(IContext context, myfirstmodule.proxies.Button _button)
+	{
+		Map<java.lang.String, Object> params = new HashMap<>();
+		params.put("Button", _button == null ? null : _button.getMendixObject());
+		Core.microflowCall("MyFirstModule.ACT_Button_Save").withParams(params).execute(context);
 	}
 	public static myfirstmodule.proxies.Root dS_Root_GetOrCreate(IContext context)
 	{

@@ -23,7 +23,8 @@ public class Button
 		Text("Text"),
 		Selected("Selected"),
 		KeyString("KeyString"),
-		KeyInt("KeyInt");
+		KeyInt("KeyInt"),
+		Button_Root("MyFirstModule.Button_Root");
 
 		private java.lang.String metaName;
 
@@ -260,6 +261,49 @@ public class Button
 	public final void setKeyInt(com.mendix.systemwideinterfaces.core.IContext context, java.lang.Integer keyint)
 	{
 		getMendixObject().setValue(context, MemberNames.KeyInt.toString(), keyint);
+	}
+
+	/**
+	 * @return value of Button_Root
+	 */
+	public final myfirstmodule.proxies.Root getButton_Root() throws com.mendix.core.CoreException
+	{
+		return getButton_Root(getContext());
+	}
+
+	/**
+	 * @param context
+	 * @return value of Button_Root
+	 */
+	public final myfirstmodule.proxies.Root getButton_Root(com.mendix.systemwideinterfaces.core.IContext context) throws com.mendix.core.CoreException
+	{
+		myfirstmodule.proxies.Root result = null;
+		com.mendix.systemwideinterfaces.core.IMendixIdentifier identifier = getMendixObject().getValue(context, MemberNames.Button_Root.toString());
+		if (identifier != null)
+			result = myfirstmodule.proxies.Root.load(context, identifier);
+		return result;
+	}
+
+	/**
+	 * Set value of Button_Root
+	 * @param button_root
+	 */
+	public final void setButton_Root(myfirstmodule.proxies.Root button_root)
+	{
+		setButton_Root(getContext(), button_root);
+	}
+
+	/**
+	 * Set value of Button_Root
+	 * @param context
+	 * @param button_root
+	 */
+	public final void setButton_Root(com.mendix.systemwideinterfaces.core.IContext context, myfirstmodule.proxies.Root button_root)
+	{
+		if (button_root == null)
+			getMendixObject().setValue(context, MemberNames.Button_Root.toString(), null);
+		else
+			getMendixObject().setValue(context, MemberNames.Button_Root.toString(), button_root.getMendixObject().getId());
 	}
 
 	/**
