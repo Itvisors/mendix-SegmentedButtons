@@ -45,6 +45,32 @@
                 <caption>Multi-select</caption>
                 <description>If set to true, multiple options can be selected. Otherwise, the widget can be used as single-select</description>
             </property>
+            <property key="buttonStyle" type="enumeration" defaultValue="default">
+                <caption>Button style</caption>
+                <description>The style the button will get when not selected</description>
+                <enumerationValues>
+                    <enumerationValue key="default">Default</enumerationValue>
+                    <enumerationValue key="primary">Primary</enumerationValue>
+                    <enumerationValue key="inverse">Inverse</enumerationValue>
+                    <enumerationValue key="info">Info</enumerationValue>
+                    <enumerationValue key="success">Success</enumerationValue>
+                    <enumerationValue key="warning">Warning</enumerationValue>
+                    <enumerationValue key="danger">Danger</enumerationValue>
+                </enumerationValues>
+            </property>
+             <property key="buttonStyleSelected" type="enumeration" defaultValue="primary">
+                <caption>Button style selected</caption>
+                <description>The style the button will get when selected</description>
+                <enumerationValues>
+                    <enumerationValue key="default">Default</enumerationValue>
+                    <enumerationValue key="primary">Primary</enumerationValue>
+                    <enumerationValue key="inverse">Inverse</enumerationValue>
+                    <enumerationValue key="info">Info</enumerationValue>
+                    <enumerationValue key="success">Success</enumerationValue>
+                    <enumerationValue key="warning">Warning</enumerationValue>
+                    <enumerationValue key="danger">Danger</enumerationValue>
+                </enumerationValues>
+            </property>
         </propertyGroup>
         <propertyGroup caption="Events">
             <property key="onClickAction" type="action" required="false">

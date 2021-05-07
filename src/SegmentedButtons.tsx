@@ -99,6 +99,8 @@ export default class SegmentedButtons extends Component<SegmentedButtonsContaine
         return <ButtonGroup 
             buttons = {this.buttons}
             onButtonClick = {(button : Button) => this.buttonClick(button)}
+            buttonStyle = {this.props.buttonStyle}
+            buttonStyleSelected = {this.props.buttonStyleSelected}
         />;
     }
 }
