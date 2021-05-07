@@ -100,6 +100,9 @@ export default class SegmentedButtons extends Component<SegmentedButtonsContaine
         if (this.props.editable && this.props.editable.value !== undefined) {
             editable = this.props.editable.value;
         }
+        if (this.props.responseAttribute.readOnly) {
+            editable = false
+        }
         return <ButtonGroup 
             buttons = {this.buttons}
             onButtonClick = {(button : Button) => this.buttonClick(button)}

@@ -76,7 +76,7 @@
             <property key="onClickAction" type="action" required="false">
                 <caption>On Change Action</caption>
                 <description>Action to trigger when an button is clicked. 
-                Since this action is triggered for every change and this can happen quite fast if "No close on select" is set to true, it is wise to keep this action very short. If this combination is used, the response can best be mapped when used e.g. on save.</description>
+                Since this action is triggered for every change and this can happen quite fast, it is wise to keep this action very short. The response can best be mapped when used e.g. on save of the page.</description>
             </property>
             <property key="responseAttribute" type="attribute" required="true">
                 <caption>Response</caption>
