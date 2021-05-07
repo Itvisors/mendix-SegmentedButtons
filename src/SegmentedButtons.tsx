@@ -96,11 +96,16 @@ export default class SegmentedButtons extends Component<SegmentedButtonsContaine
     }
 
     render(): ReactNode {
+        let editable = true;
+        if (this.props.editable && this.props.editable.value !== undefined) {
+            editable = this.props.editable.value;
+        }
         return <ButtonGroup 
             buttons = {this.buttons}
             onButtonClick = {(button : Button) => this.buttonClick(button)}
             buttonStyle = {this.props.buttonStyle}
             buttonStyleSelected = {this.props.buttonStyleSelected}
+            editable = {editable}
         />;
     }
 }

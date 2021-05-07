@@ -6,6 +6,7 @@ export interface ButtonGroupProps {
     onButtonClick?: Function;
     buttonStyle: String;
     buttonStyleSelected: String;
+    editable: Boolean;
 }
 
 export class ButtonGroup extends Component<ButtonGroupProps> {
@@ -13,9 +14,10 @@ export class ButtonGroup extends Component<ButtonGroupProps> {
         return buttonArray.map((button) => {
             let className = "btn mx-button"
             className += button.selected ? " selected btn-" + this.props.buttonStyleSelected : " selected btn-" + this.props.buttonStyle;
+            className += this.props.editable ? "" : " disabled";
             return <button 
                 className = {className}
-                onClick = {() => this.props.onButtonClick ? this.props.onButtonClick(button) : undefined}
+                onClick = {() => this.props.onButtonClick && this.props.editable ? this.props.onButtonClick(button) : undefined}
                 >
                     {button.title}
                 </button>

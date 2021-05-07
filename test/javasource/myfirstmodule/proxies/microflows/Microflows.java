@@ -27,6 +27,20 @@ public class Microflows
 		params.put("Button", _button == null ? null : _button.getMendixObject());
 		Core.microflowCall("MyFirstModule.ACT_Button_Save").withParams(params).execute(context);
 	}
+	public static java.util.List<myfirstmodule.proxies.Button> dS_Root_Buttons(IContext context, myfirstmodule.proxies.Root _root)
+	{
+		Map<java.lang.String, Object> params = new HashMap<>();
+		params.put("Root", _root == null ? null : _root.getMendixObject());
+		java.util.List<IMendixObject> objs = Core.microflowCall("MyFirstModule.DS_Root_Buttons").withParams(params).execute(context);
+		java.util.List<myfirstmodule.proxies.Button> result = null;
+		if (objs != null)
+		{
+			result = new java.util.ArrayList<>();
+			for (IMendixObject obj : objs)
+				result.add(myfirstmodule.proxies.Button.initialize(context, obj));
+		}
+		return result;
+	}
 	public static myfirstmodule.proxies.Root dS_Root_GetOrCreate(IContext context)
 	{
 		Map<java.lang.String, Object> params = new HashMap<>();

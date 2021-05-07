@@ -20,7 +20,8 @@ public class Root
 	 */
 	public enum MemberNames
 	{
-		Response("Response");
+		Response("Response"),
+		Editable("Editable");
 
 		private java.lang.String metaName;
 
@@ -149,6 +150,42 @@ public class Root
 	public final void setResponse(com.mendix.systemwideinterfaces.core.IContext context, java.lang.String response)
 	{
 		getMendixObject().setValue(context, MemberNames.Response.toString(), response);
+	}
+
+	/**
+	 * @return value of Editable
+	 */
+	public final java.lang.Boolean getEditable()
+	{
+		return getEditable(getContext());
+	}
+
+	/**
+	 * @param context
+	 * @return value of Editable
+	 */
+	public final java.lang.Boolean getEditable(com.mendix.systemwideinterfaces.core.IContext context)
+	{
+		return (java.lang.Boolean) getMendixObject().getValue(context, MemberNames.Editable.toString());
+	}
+
+	/**
+	 * Set value of Editable
+	 * @param editable
+	 */
+	public final void setEditable(java.lang.Boolean editable)
+	{
+		setEditable(getContext(), editable);
+	}
+
+	/**
+	 * Set value of Editable
+	 * @param context
+	 * @param editable
+	 */
+	public final void setEditable(com.mendix.systemwideinterfaces.core.IContext context, java.lang.Boolean editable)
+	{
+		getMendixObject().setValue(context, MemberNames.Editable.toString(), editable);
 	}
 
 	/**
