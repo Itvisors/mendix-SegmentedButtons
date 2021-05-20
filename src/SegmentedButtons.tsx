@@ -96,16 +96,35 @@ export default class SegmentedButtons extends Component<SegmentedButtonsContaine
     }
 
     buttonClick = (button : Button) => { 
-        button.selected = !button.selected;
-        if (button.selected) {
-            this.buttonsSelected.push({title: button.title, key: button.key});
-        } else {
-            // Remove the button from the selected array
-            const buttonsSelected = this.buttonsSelected.filter(buttonItem => {
-                return buttonItem.title != button.title;
-            });
-            this.buttonsSelected = buttonsSelected;
-        }
+        const isSelected = !button.selected;
+        // First update button array
+        let newButtons = this.buttons.map(buttonItem => {
+            if (buttonItem.title === button.title) {
+                if (isSelected) {
+                    return {...buttonItem, selected: true};
+                } else {
+                    return {...buttonItem, selected: false};
+                }
+            } else {
+                // If multiselect is on, the other buttons remain untouched, otherwise the button will be deselected
+                if (this.props.multiple) {
+                    return {...buttonItem};
+                } else {
+                    return {...buttonItem, selected: false};
+                }
+            }
+        });
+        
+        // update buttsonsSelected array
+        let buttonsSelected = newButtons.filter(buttonItem => {
+            if (buttonItem.selected) {
+                return {title: buttonItem.title, key: buttonItem.key}
+            }
+        });
+
+        this.buttons = newButtons;
+        this.buttonsSelected = buttonsSelected;
+
         this.props.responseAttribute.setValue(JSON.stringify(this.buttonsSelected));
         if (this.props.onClickAction && this.props.onClickAction.canExecute) {
                 this.props.onClickAction.execute();
