@@ -14,16 +14,22 @@ export interface Button {
     title: String | undefined;
     key: String | Big | undefined;
     selected: Boolean;
-    id: number;
   }
+
+export interface ButtonSelected {
+    title: String | undefined;
+    key: String | Big | undefined;
+}
 
 export default class SegmentedButtons extends Component<SegmentedButtonsContainerProps> {
     buttons: Array<Button>;
+    buttonsSelected: Array<ButtonSelected>;
     initialized: Boolean;
 
     constructor(props: SegmentedButtonsContainerProps) {
         super(props);
         this.buttons = [];
+        this.buttonsSelected = [];
         this.initialized = false;
     }
 
@@ -48,7 +54,7 @@ export default class SegmentedButtons extends Component<SegmentedButtonsContaine
             // If the items have been changed
             if (this.props.dataSourceButtons.items &&
                 (refresh || this.props.dataSourceButtons.items !== prevProps.dataSourceButtons.items)) {
-                let buttonsSelected = 0;
+                let buttonsSelected: ButtonSelected[] = [];
                 const multiSelect = this.props.multiple;
                 // Map the options and get the selected ones
                 const newButtons = this.props.dataSourceButtons.items.map(buttonItem => {
@@ -64,24 +70,26 @@ export default class SegmentedButtons extends Component<SegmentedButtonsContaine
                         button.selected = false;
                         if (this.props.defaultSelectedAttr && this.props.defaultSelectedAttr(buttonItem).value) {
                             button.selected = true;
-                            if (!multiSelect && buttonsSelected === 1) {
+                            if (!multiSelect && buttonsSelected.length === 1) {
                                 console.warn("Segmented buttons: Multiple options are set as default for a single select.");
-                                buttonsSelected ++;
-                            } 
+                            }
+                            buttonsSelected.push({title: button.title, key: button.key});
                         }
                     } else {
                         // Else check if option is selected (based on the title). This is done since it can be the case that the options have been changed.
-                        if (this.buttons.find(button => button.selected && button.title === buttonTitle)) {
+                        if (this.buttonsSelected.find(button => button.title === buttonTitle)) {
                             button.selected = true;
+                            buttonsSelected.push({title: button.title, key: button.key});
                         } else {
                             button.selected = false;
                         }
                     }
                     return button;
-                })
+                });
                 this.initialized = true;
                 this.buttons = newButtons;
-                this.props.responseAttribute.setValue(JSON.stringify(this.buttons));
+                this.props.responseAttribute.setValue(JSON.stringify(buttonsSelected));
+                this.buttonsSelected = buttonsSelected;
                 this.setState({updateDate: new Date()});
             }
         }
@@ -89,7 +97,16 @@ export default class SegmentedButtons extends Component<SegmentedButtonsContaine
 
     buttonClick = (button : Button) => { 
         button.selected = !button.selected;
-        this.props.responseAttribute.setValue(JSON.stringify(this.buttons));
+        if (button.selected) {
+            this.buttonsSelected.push({title: button.title, key: button.key});
+        } else {
+            // Remove the button from the selected array
+            const buttonsSelected = this.buttonsSelected.filter(buttonItem => {
+                return buttonItem.title != button.title;
+            });
+            this.buttonsSelected = buttonsSelected;
+        }
+        this.props.responseAttribute.setValue(JSON.stringify(this.buttonsSelected));
         if (this.props.onClickAction && this.props.onClickAction.canExecute) {
                 this.props.onClickAction.execute();
         }   
