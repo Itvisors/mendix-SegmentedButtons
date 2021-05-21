@@ -21,12 +21,12 @@ export interface SegmentedButtonsContainerProps {
     titleAttr: ListAttributeValue<string>;
     keyAttr?: ListAttributeValue<string | BigJs.Big>;
     defaultSelectedAttr?: ListAttributeValue<boolean>;
+    responseAttribute: EditableValue<string>;
+    onClickAction?: ActionValue;
+    refreshAttribute?: EditableValue<boolean>;
     multiple: boolean;
     buttonStyle: ButtonStyleEnum;
     buttonStyleSelected: ButtonStyleSelectedEnum;
-    onClickAction?: ActionValue;
-    responseAttribute: EditableValue<string>;
-    refreshAttribute?: EditableValue<boolean>;
 }
 
 export interface SegmentedButtonsPreviewProps {
@@ -37,10 +37,10 @@ export interface SegmentedButtonsPreviewProps {
     titleAttr: string;
     keyAttr: string;
     defaultSelectedAttr: string;
+    responseAttribute: string;
+    onClickAction: {} | null;
+    refreshAttribute: string;
     multiple: boolean;
     buttonStyle: ButtonStyleEnum;
     buttonStyleSelected: ButtonStyleSelectedEnum;
-    onClickAction: {} | null;
-    responseAttribute: string;
-    refreshAttribute: string;
 }

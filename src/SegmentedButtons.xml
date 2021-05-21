@@ -21,22 +21,43 @@
             </property>
             <property key="titleAttr" type="attribute" dataSource="dataSourceButtons" required="true">
                 <caption>Title</caption>
-                <description>String attribute where the title is stored to be shown in the button. Should be unique to be able to  to make a distinction between the items.</description>
+                <description>String attribute where the title is stored to be shown in the button. Should be unique to be able to make a distinction between the items.</description>
                 <attributeTypes>
                     <attributeType name="String"/>
                 </attributeTypes>
             </property>
             <property key="keyAttr" type="attribute" dataSource="dataSourceButtons" required="false">
                 <caption>Key</caption>
-                <description>Optional: Attribute where the key is stored. This key is only used in the response and can be used when the title does not suffice to find the object in mendix. The new JSON will be for example [{"title":"example1", "key":"1234"}] for multiselect when a string key is used.</description>
+                <description>Optional: Attribute where the key is stored. This key is only used to be returned in the response and can be used when the title does not suffice to find the object in mendix. The new JSON will be for example [{"title":"example1", "key":"1234"}] for multiselect when a string key is used.</description>
                 <attributeTypes>
                     <attributeType name="String"/>
                     <attributeType name="Integer"/>
                 </attributeTypes>
             </property>
             <property key="defaultSelectedAttr" type="attribute" dataSource="dataSourceButtons" required="false">
-                <caption>Selected</caption>
-                <description>Optional: Boolean attribute where is stored whether this option is selected or not. Write access is needed.</description>
+                <caption>Default selected</caption>
+                <description>Optional: Boolean attribute where is stored whether this option is selected by default or not.</description>
+                <attributeTypes>
+                    <attributeType name="Boolean"/>
+                </attributeTypes>
+            </property>
+            <property key="responseAttribute" type="attribute" required="true">
+                <caption>Response</caption>
+                <description>Attribute where the selected button(s) are stored in json format ([{"title":"example1","key":"string"}]. User needs write access on this attribute.</description>
+                <attributeTypes>
+                    <attributeType name="String"/>
+                </attributeTypes>
+            </property>
+        </propertyGroup>
+        <propertyGroup caption="Options">
+            <property key="onClickAction" type="action" required="false">
+                <caption>On Change Action</caption>
+                <description>Action to trigger when a button is clicked. 
+                Since this action is triggered for every change and this can happen quite fast, it is wise to keep this action very short. The response can best be mapped when used e.g. on save of the page.</description>
+            </property>
+            <property key="refreshAttribute" type="attribute" required="false">
+                <caption>Refresh</caption>
+                <description>Set to true to refresh the widget back to the default values, widget will set the value back to false. Make sure the user has got write access.</description>
                 <attributeTypes>
                     <attributeType name="Boolean"/>
                 </attributeTypes>
@@ -70,27 +91,6 @@
                     <enumerationValue key="warning">Warning</enumerationValue>
                     <enumerationValue key="danger">Danger</enumerationValue>
                 </enumerationValues>
-            </property>
-        </propertyGroup>
-        <propertyGroup caption="Events">
-            <property key="onClickAction" type="action" required="false">
-                <caption>On Change Action</caption>
-                <description>Action to trigger when an button is clicked. 
-                Since this action is triggered for every change and this can happen quite fast, it is wise to keep this action very short. The response can best be mapped when used e.g. on save of the page.</description>
-            </property>
-            <property key="responseAttribute" type="attribute" required="true">
-                <caption>Response</caption>
-                <description>Attribute where the selected button(s) are stored in json format ([{"title":"example1","key":"string"}]. User needs write access on this attribute.</description>
-                <attributeTypes>
-                    <attributeType name="String"/>
-                </attributeTypes>
-            </property>
-            <property key="refreshAttribute" type="attribute" required="false">
-                <caption>Refresh</caption>
-                <description>Set to true to refresh the widget back to the default values, widget will set the value back to false. Make sure the user has got write access.</description>
-                <attributeTypes>
-                    <attributeType name="Boolean"/>
-                </attributeTypes>
             </property>
         </propertyGroup>
     </properties>
