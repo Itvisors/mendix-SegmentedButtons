@@ -13,17 +13,13 @@ interface SegmentedButtonsState {
 export interface Button {
     title: String | undefined;
     key: String | Big | undefined;
-    selected: Boolean;
-  }
-
-export interface ButtonSelected {
-    title: String | undefined;
-    key: String | Big | undefined;
+    selected?: Boolean;
 }
 
 export default class SegmentedButtons extends Component<SegmentedButtonsContainerProps> {
+    // Two arrays for the buttons are used, one for all buttons and one for only the selected ones
     buttons: Array<Button>;
-    buttonsSelected: Array<ButtonSelected>;
+    buttonsSelected: Array<Button>;
     initialized: Boolean;
 
     constructor(props: SegmentedButtonsContainerProps) {
@@ -38,15 +34,15 @@ export default class SegmentedButtons extends Component<SegmentedButtonsContaine
     };
 
     componentDidUpdate (prevProps: SegmentedButtonsContainerProps) {
+        // Always refresh widget for first time
         let refresh = !this.initialized;
 
         // Refresh the data if the refreshAttribute has been set to true
         if(prevProps.refreshAttribute && this.props.refreshAttribute &&
             this.props.refreshAttribute.value && !prevProps.refreshAttribute.value) {
-            
-            this.props.refreshAttribute.setValue(false);
-            // Make sure data and state will be refreshed
-            refresh = true; 
+                this.props.refreshAttribute.setValue(false);
+                // Make sure data and state will be refreshed
+                refresh = true; 
         }
 
         // Check if the datasource has been loaded
@@ -54,7 +50,7 @@ export default class SegmentedButtons extends Component<SegmentedButtonsContaine
             // If the items have been changed
             if (this.props.dataSourceButtons.items &&
                 (refresh || this.props.dataSourceButtons.items !== prevProps.dataSourceButtons.items)) {
-                let buttonsSelected: ButtonSelected[] = [];
+                let buttonsSelected: Button[] = [];
                 const multiSelect = this.props.multiple;
                 // Map the options and get the selected ones
                 const newButtons = this.props.dataSourceButtons.items.map(buttonItem => {
@@ -88,8 +84,8 @@ export default class SegmentedButtons extends Component<SegmentedButtonsContaine
                 });
                 this.initialized = true;
                 this.buttons = newButtons;
-                this.props.responseAttribute.setValue(JSON.stringify(buttonsSelected));
                 this.buttonsSelected = buttonsSelected;
+                this.props.responseAttribute.setValue(JSON.stringify(buttonsSelected));
                 this.setState({updateDate: new Date()});
             }
         }
@@ -115,12 +111,14 @@ export default class SegmentedButtons extends Component<SegmentedButtonsContaine
             }
         });
         
-        // update buttsonsSelected array
-        let buttonsSelected = newButtons.filter(buttonItem => {
+        // update buttsonsSelected array, push all selected buttons and remove selected attribute
+        let buttonsSelected = newButtons.reduce((filtered: Button[], buttonItem) => {
             if (buttonItem.selected) {
-                return {title: buttonItem.title, key: buttonItem.key}
+                // add the selected button, but clear selected since the array only contains selected items
+                filtered.push({...buttonItem, selected: undefined});
             }
-        });
+            return filtered;
+        }, []);
 
         this.buttons = newButtons;
         this.buttonsSelected = buttonsSelected;
