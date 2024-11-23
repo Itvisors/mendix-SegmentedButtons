@@ -11,16 +11,21 @@ interface SegmentedButtonsState {
 }
 
 export interface Button {
-    title: String | undefined;
-    key: String | Big | undefined;
-    selected?: Boolean;
+    title: string | undefined;
+    key: string | Big | undefined;
+    selected?: boolean;
 }
 
 export default class SegmentedButtons extends Component<SegmentedButtonsContainerProps> {
     // Two arrays for the buttons are used, one for all buttons and one for only the selected ones
-    buttons: Array<Button>;
-    buttonsSelected: Array<Button>;
-    initialized: Boolean;
+    buttons: Button[];
+    buttonsSelected: Button[];
+    initialized: boolean;
+
+    readonly state: SegmentedButtonsState = {
+        updateDate: undefined
+    };
+    props: any;
 
     constructor(props: SegmentedButtonsContainerProps) {
         super(props);
@@ -29,53 +34,57 @@ export default class SegmentedButtons extends Component<SegmentedButtonsContaine
         this.initialized = false;
     }
 
-    readonly state: SegmentedButtonsState = { 
-        updateDate: undefined,
-    };
-
-    componentDidUpdate (prevProps: SegmentedButtonsContainerProps) {
+    componentDidUpdate(prevProps: SegmentedButtonsContainerProps): void {
         // Always refresh widget for first time
         let refresh = !this.initialized;
 
         // Refresh the data if the refreshAttribute has been set to true
-        if(prevProps.refreshAttribute && this.props.refreshAttribute &&
-            this.props.refreshAttribute.value && !prevProps.refreshAttribute.value) {
-                this.props.refreshAttribute.setValue(false);
-                // Make sure data and state will be refreshed
-                refresh = true; 
+        if (
+            prevProps.refreshAttribute &&
+            this.props.refreshAttribute &&
+            this.props.refreshAttribute.value &&
+            !prevProps.refreshAttribute.value
+        ) {
+            this.props.refreshAttribute.setValue(false);
+            // Make sure data and state will be refreshed
+            refresh = true;
         }
 
         // Check if the datasource has been loaded
-        if (this.props.dataSourceButtons.status === 'available') {
+        if (this.props.dataSourceButtons.status === "available") {
             // If the items have been changed
-            if (this.props.dataSourceButtons.items &&
-                (refresh || this.props.dataSourceButtons.items !== prevProps.dataSourceButtons.items)) {
-                let buttonsSelected: Button[] = [];
+            if (
+                this.props.dataSourceButtons.items &&
+                (refresh || this.props.dataSourceButtons.items !== prevProps.dataSourceButtons.items)
+            ) {
+                const buttonsSelected: Button[] = [];
                 const multiSelect = this.props.multiple;
                 // Map the options and get the selected ones
-                const newButtons = this.props.dataSourceButtons.items.map(buttonItem => {
-                    const button = {} as Button; 
-                    const buttonTitle = this.props.titleAttr(buttonItem).value;
+                const newButtons = this.props.dataSourceButtons.items.map((buttonItem: any) => {
+                    const button = {} as Button;
+                    const buttonTitle = this.props.titleAttr.get(buttonItem).value;
                     button.title = buttonTitle;
-                    //If key is used, add key to the option
+                    // If key is used, add key to the option
                     if (this.props.keyAttr) {
-                        button.key = this.props.keyAttr(buttonItem).value;
+                        button.key = this.props.keyAttr.get(buttonItem).value;
                     }
                     // If data needs to be refreshed, get default options
                     if (refresh) {
                         button.selected = false;
-                        if (this.props.defaultSelectedAttr && this.props.defaultSelectedAttr(buttonItem).value) {
+                        if (this.props.defaultSelectedAttr && this.props.defaultSelectedAttr.get(buttonItem).value) {
                             button.selected = true;
                             if (!multiSelect && buttonsSelected.length === 1) {
-                                console.warn("Segmented buttons: Multiple options are set as default for a single select.");
+                                console.warn(
+                                    "Segmented buttons: Multiple options are set as default for a single select."
+                                );
                             }
-                            buttonsSelected.push({title: button.title, key: button.key});
+                            buttonsSelected.push({ title: button.title, key: button.key });
                         }
                     } else {
                         // Else check if option is selected (based on the title). This is done since it can be the case that the options have been changed.
                         if (this.buttonsSelected.find(button => button.title === buttonTitle)) {
                             button.selected = true;
-                            buttonsSelected.push({title: button.title, key: button.key});
+                            buttonsSelected.push({ title: button.title, key: button.key });
                         } else {
                             button.selected = false;
                         }
@@ -86,36 +95,36 @@ export default class SegmentedButtons extends Component<SegmentedButtonsContaine
                 this.buttons = newButtons;
                 this.buttonsSelected = buttonsSelected;
                 this.props.responseAttribute.setValue(JSON.stringify(buttonsSelected));
-                this.setState({updateDate: new Date()});
+                this.setState({ updateDate: new Date() });
             }
         }
     }
 
-    buttonClick = (button : Button) => { 
+    buttonClick = (button: Button): any => {
         const isSelected = !button.selected;
         // First update button array
-        let newButtons = this.buttons.map(buttonItem => {
+        const newButtons = this.buttons.map(buttonItem => {
             if (buttonItem.title === button.title) {
                 if (isSelected) {
-                    return {...buttonItem, selected: true};
+                    return { ...buttonItem, selected: true };
                 } else {
-                    return {...buttonItem, selected: false};
+                    return { ...buttonItem, selected: false };
                 }
             } else {
                 // If multiselect is on, the other buttons remain untouched, otherwise the button will be deselected
                 if (this.props.multiple) {
-                    return {...buttonItem};
+                    return { ...buttonItem };
                 } else {
-                    return {...buttonItem, selected: false};
+                    return { ...buttonItem, selected: false };
                 }
             }
         });
-        
+
         // update buttsonsSelected array, push all selected buttons and remove selected attribute
-        let buttonsSelected = newButtons.reduce((filtered: Button[], buttonItem) => {
+        const buttonsSelected = newButtons.reduce((filtered: Button[], buttonItem) => {
             if (buttonItem.selected) {
                 // add the selected button, but clear selected since the array only contains selected items
-                filtered.push({...buttonItem, selected: undefined});
+                filtered.push({ ...buttonItem, selected: undefined });
             }
             return filtered;
         }, []);
@@ -125,9 +134,9 @@ export default class SegmentedButtons extends Component<SegmentedButtonsContaine
 
         this.props.responseAttribute.setValue(JSON.stringify(this.buttonsSelected));
         if (this.props.onClickAction && this.props.onClickAction.canExecute) {
-                this.props.onClickAction.execute();
-        }   
-    }
+            this.props.onClickAction.execute();
+        }
+    };
 
     render(): ReactNode {
         let editable = true;
@@ -135,14 +144,16 @@ export default class SegmentedButtons extends Component<SegmentedButtonsContaine
             editable = this.props.editable.value;
         }
         if (this.props.responseAttribute.readOnly) {
-            editable = false
+            editable = false;
         }
-        return <ButtonGroup 
-            buttons = {this.buttons}
-            onButtonClick = {(button : Button) => this.buttonClick(button)}
-            buttonStyle = {this.props.buttonStyle}
-            buttonStyleSelected = {this.props.buttonStyleSelected}
-            editable = {editable}
-        />;
+        return (
+            <ButtonGroup
+                buttons={this.buttons}
+                onButtonClick={(button: Button) => this.buttonClick(button)}
+                buttonStyle={this.props.buttonStyle}
+                buttonStyleSelected={this.props.buttonStyleSelected}
+                editable={editable}
+            />
+        );
     }
 }

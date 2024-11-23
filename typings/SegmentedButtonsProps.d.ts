@@ -1,10 +1,10 @@
 /**
  * This file was generated from SegmentedButtons.xml
  * WARNING: All changes made to this file will be overwritten
- * @author Mendix UI Content Team
+ * @author Mendix Widgets Framework Team
  */
-import { CSSProperties } from "react";
 import { ActionValue, DynamicValue, EditableValue, ListValue, ListAttributeValue } from "mendix";
+import { Big } from "big.js";
 
 export type ButtonStyleEnum = "default" | "primary" | "inverse" | "info" | "success" | "warning" | "danger";
 
@@ -12,14 +12,12 @@ export type ButtonStyleSelectedEnum = "default" | "primary" | "inverse" | "info"
 
 export interface SegmentedButtonsContainerProps {
     name: string;
-    class: string;
-    style?: CSSProperties;
     tabIndex?: number;
     id: string;
     editable?: DynamicValue<boolean>;
     dataSourceButtons: ListValue;
     titleAttr: ListAttributeValue<string>;
-    keyAttr?: ListAttributeValue<string | BigJs.Big>;
+    keyAttr?: ListAttributeValue<string | Big>;
     defaultSelectedAttr?: ListAttributeValue<boolean>;
     responseAttribute: EditableValue<string>;
     onClickAction?: ActionValue;
@@ -30,10 +28,10 @@ export interface SegmentedButtonsContainerProps {
 }
 
 export interface SegmentedButtonsPreviewProps {
-    class: string;
-    style: string;
+    readOnly: boolean;
+    renderMode?: "design" | "xray" | "structure";
     editable: string;
-    dataSourceButtons: {} | null;
+    dataSourceButtons: {} | { caption: string } | { type: string } | null;
     titleAttr: string;
     keyAttr: string;
     defaultSelectedAttr: string;
