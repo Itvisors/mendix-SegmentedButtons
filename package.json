@@ -1,7 +1,7 @@
 {
   "name": "segmentedbuttons",
   "widgetName": "SegmentedButtons",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Show a group of buttons dynamically and use it for single or multi select or to perform actions",
   "copyright": "Aiden(2024)",
   "author": "Johan Munneke",

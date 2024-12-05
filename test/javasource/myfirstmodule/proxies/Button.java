@@ -4,7 +4,7 @@
 
 package myfirstmodule.proxies;
 
-public class Button
+public class Button implements com.mendix.systemwideinterfaces.core.IEntityProxy
 {
 	private final com.mendix.systemwideinterfaces.core.IMendixObject buttonMendixObject;
 
@@ -26,7 +26,7 @@ public class Button
 		KeyInt("KeyInt"),
 		Button_Root("MyFirstModule.Button_Root");
 
-		private java.lang.String metaName;
+		private final java.lang.String metaName;
 
 		MemberNames(java.lang.String s)
 		{
@@ -42,32 +42,28 @@ public class Button
 
 	public Button(com.mendix.systemwideinterfaces.core.IContext context)
 	{
-		this(context, com.mendix.core.Core.instantiate(context, "MyFirstModule.Button"));
+		this(context, com.mendix.core.Core.instantiate(context, entityName));
 	}
 
 	protected Button(com.mendix.systemwideinterfaces.core.IContext context, com.mendix.systemwideinterfaces.core.IMendixObject buttonMendixObject)
 	{
-		if (buttonMendixObject == null)
+		if (buttonMendixObject == null) {
 			throw new java.lang.IllegalArgumentException("The given object cannot be null.");
-		if (!com.mendix.core.Core.isSubClassOf("MyFirstModule.Button", buttonMendixObject.getType()))
-			throw new java.lang.IllegalArgumentException("The given object is not a MyFirstModule.Button");
+		}
+		if (!com.mendix.core.Core.isSubClassOf(entityName, buttonMendixObject.getType())) {
+			throw new java.lang.IllegalArgumentException(String.format("The given object is not a %s", entityName));
+		}	
 
 		this.buttonMendixObject = buttonMendixObject;
 		this.context = context;
 	}
 
 	/**
-	 * @deprecated Use 'Button.load(IContext, IMendixIdentifier)' instead.
-	 */
-	@java.lang.Deprecated
-	public static myfirstmodule.proxies.Button initialize(com.mendix.systemwideinterfaces.core.IContext context, com.mendix.systemwideinterfaces.core.IMendixIdentifier mendixIdentifier) throws com.mendix.core.CoreException
-	{
-		return myfirstmodule.proxies.Button.load(context, mendixIdentifier);
-	}
-
-	/**
 	 * Initialize a proxy using context (recommended). This context will be used for security checking when the get- and set-methods without context parameters are called.
 	 * The get- and set-methods with context parameter should be used when for instance sudo access is necessary (IContext.createSudoClone() can be used to obtain sudo access).
+	 * @param context The context to be used
+	 * @param mendixObject The Mendix object for the new instance
+	 * @return a new instance of this proxy class
 	 */
 	public static myfirstmodule.proxies.Button initialize(com.mendix.systemwideinterfaces.core.IContext context, com.mendix.systemwideinterfaces.core.IMendixObject mendixObject)
 	{
@@ -82,43 +78,13 @@ public class Button
 
 	public static java.util.List<myfirstmodule.proxies.Button> load(com.mendix.systemwideinterfaces.core.IContext context, java.lang.String xpathConstraint) throws com.mendix.core.CoreException
 	{
-		java.util.List<myfirstmodule.proxies.Button> result = new java.util.ArrayList<myfirstmodule.proxies.Button>();
-		for (com.mendix.systemwideinterfaces.core.IMendixObject obj : com.mendix.core.Core.retrieveXPathQuery(context, "//MyFirstModule.Button" + xpathConstraint))
-			result.add(myfirstmodule.proxies.Button.initialize(context, obj));
-		return result;
+		return com.mendix.core.Core.createXPathQuery(String.format("//%1$s%2$s", entityName, xpathConstraint))
+			.execute(context)
+			.stream()
+			.map(obj -> myfirstmodule.proxies.Button.initialize(context, obj))
+			.collect(java.util.stream.Collectors.toList());
 	}
 
-	/**
-	 * Commit the changes made on this proxy object.
-	 */
-	public final void commit() throws com.mendix.core.CoreException
-	{
-		com.mendix.core.Core.commit(context, getMendixObject());
-	}
-
-	/**
-	 * Commit the changes made on this proxy object using the specified context.
-	 */
-	public final void commit(com.mendix.systemwideinterfaces.core.IContext context) throws com.mendix.core.CoreException
-	{
-		com.mendix.core.Core.commit(context, getMendixObject());
-	}
-
-	/**
-	 * Delete the object.
-	 */
-	public final void delete()
-	{
-		com.mendix.core.Core.delete(context, getMendixObject());
-	}
-
-	/**
-	 * Delete the object using the specified context.
-	 */
-	public final void delete(com.mendix.systemwideinterfaces.core.IContext context)
-	{
-		com.mendix.core.Core.delete(context, getMendixObject());
-	}
 	/**
 	 * @return value of Text
 	 */
@@ -264,6 +230,7 @@ public class Button
 	}
 
 	/**
+	 * @throws com.mendix.core.CoreException
 	 * @return value of Button_Root
 	 */
 	public final myfirstmodule.proxies.Root getButton_Root() throws com.mendix.core.CoreException
@@ -274,13 +241,15 @@ public class Button
 	/**
 	 * @param context
 	 * @return value of Button_Root
+	 * @throws com.mendix.core.CoreException
 	 */
 	public final myfirstmodule.proxies.Root getButton_Root(com.mendix.systemwideinterfaces.core.IContext context) throws com.mendix.core.CoreException
 	{
 		myfirstmodule.proxies.Root result = null;
 		com.mendix.systemwideinterfaces.core.IMendixIdentifier identifier = getMendixObject().getValue(context, MemberNames.Button_Root.toString());
-		if (identifier != null)
+		if (identifier != null) {
 			result = myfirstmodule.proxies.Root.load(context, identifier);
+		}
 		return result;
 	}
 
@@ -300,23 +269,20 @@ public class Button
 	 */
 	public final void setButton_Root(com.mendix.systemwideinterfaces.core.IContext context, myfirstmodule.proxies.Root button_root)
 	{
-		if (button_root == null)
+		if (button_root == null) {
 			getMendixObject().setValue(context, MemberNames.Button_Root.toString(), null);
-		else
+		} else {
 			getMendixObject().setValue(context, MemberNames.Button_Root.toString(), button_root.getMendixObject().getId());
+		}
 	}
 
-	/**
-	 * @return the IMendixObject instance of this proxy for use in the Core interface.
-	 */
+	@java.lang.Override
 	public final com.mendix.systemwideinterfaces.core.IMendixObject getMendixObject()
 	{
 		return buttonMendixObject;
 	}
 
-	/**
-	 * @return the IContext instance of this proxy, or null if no IContext instance was specified at initialization.
-	 */
+	@java.lang.Override
 	public final com.mendix.systemwideinterfaces.core.IContext getContext()
 	{
 		return context;
@@ -325,9 +291,9 @@ public class Button
 	@java.lang.Override
 	public boolean equals(Object obj)
 	{
-		if (obj == this)
+		if (obj == this) {
 			return true;
-
+		}
 		if (obj != null && getClass().equals(obj.getClass()))
 		{
 			final myfirstmodule.proxies.Button that = (myfirstmodule.proxies.Button) obj;
@@ -342,21 +308,13 @@ public class Button
 		return getMendixObject().hashCode();
 	}
 
-	/**
-	 * @return String name of this class
-	 */
+  /**
+   * Gives full name ("Module.Entity" name) of the type of the entity.
+   *
+   * @return the name
+   */
 	public static java.lang.String getType()
 	{
-		return "MyFirstModule.Button";
-	}
-
-	/**
-	 * @return String GUID from this object, format: ID_0000000000
-	 * @deprecated Use getMendixObject().getId().toLong() to get a unique identifier for this object.
-	 */
-	@java.lang.Deprecated
-	public java.lang.String getGUID()
-	{
-		return "ID_" + getMendixObject().getId().toLong();
+		return entityName;
 	}
 }
